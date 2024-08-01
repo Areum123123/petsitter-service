@@ -34,7 +34,7 @@ model Users {
   @@map("Users")
  }
 
- enum Role{
+ enum Role {
      USER
      ADMIN
  }
@@ -89,7 +89,7 @@ model Users {
 
 
 
- enum Status{
+ enum Status {
   PENDING    //예약대기
   CONFIRMED  //예약확인
   COMPLETED  //예약이행완료
