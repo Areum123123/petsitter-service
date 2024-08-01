@@ -18,7 +18,7 @@ model Users {
   email        String   @unique  
   password     String   
   name         String 
-  phone_number Int
+  phone_number String
   address      String
   role          Role     @default(USER) 
   image_url    String?
@@ -47,7 +47,7 @@ model Users {
   experience      String   
   certification   String 
   region          String
-  total_rate      Int?
+  total_rate      Float? //소숫점값 데이터 유형
   image_url       String
 
   created_at DateTime @default(now()) 
@@ -75,7 +75,7 @@ model Users {
   dog_weight          String
   request_details     String?
   booking_date        DateTime
-  status              Status
+  status              Status  @default(PENDING)
 
   created_at DateTime @default(now()) 
   updated_at DateTime @updatedAt  
@@ -84,6 +84,7 @@ model Users {
   petsitters Petsitters @relation(fields:[pet_sitter_id], references:[id], onDelete:Cascade)
   users     Users     @relation(fields:[user_id], references:[id], onDelete:Cascade)
 
+  @@unique([pet_sitter_id, booking_date]) // 펫시터의 예약날짜가 중복으로 예약되지 않도록 설정
   @@map("Reservations")
  }
 
