@@ -9,6 +9,147 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Users {
+  id           Int  @id @default(autoincrement())   
+  email        String   @unique  
+  password     String   
+  name         String 
+  phone_number Int
+  address      String
+  role          Role     @default(USER) 
+  image_url    String?
+ 
+  created_at DateTime @default(now()) 
+  updated_at DateTime @updatedAt  
+
+ reservations     Reservations[] 
+ reviews          Reviews[]
+ reservation_logs Reservation_logs[]
+ refresh_tokens   Refresh_tokens?
+
+  @@map("Users")
+ }
+
+ enum Role{
+     USER
+     ADMIN
+ }
+
+
+
+ model Petsitters {
+  id              Int  @id @default(autoincrement())   
+  name            String   
+  experience      String   
+  certification   String 
+  region          String
+  total_rate      Int?
+  image_url       String
+
+  created_at DateTime @default(now()) 
+  updated_at DateTime @updatedAt  
+  
+  reservations     Reservations[]
+  reviews          Reviews[]
+  reservation_logs Reservation_logs[]
+
+  @@map("Petsitters")
+ }
+
+
+
+
+  model Reservations {
+  id                  Int  @id @default(autoincrement())  
+
+  pet_sitter_id      Int   //FK
+  user_id            Int   //FK
+
+  dog_name            String   
+  dog_breed           String   
+  dog_age             String 
+  dog_weight          String
+  request_details     String?
+  booking_date        DateTime
+  status              Status
+
+  created_at DateTime @default(now()) 
+  updated_at DateTime @updatedAt  
+
+  
+  petsitters Petsitters @relation(fields:[pet_sitter_id], references:[id], onDelete:Cascade)
+  users     Users     @relation(fields:[user_id], references:[id], onDelete:Cascade)
+
+  @@map("Reservations")
+ }
+
+
+
+ enum Status{
+  PENDING    //예약대기
+  CONFIRMED  //예약확인
+  COMPLETED  //예약이행완료
+  CANCELED   //예약취소
+ }
+
+
+
+
+ model Reviews {
+  id              Int  @id @default(autoincrement())   
+  
+  pet_sitter_id   Int      //FK  
+  user_id         Int       //FK   
+
+  rating          Int 
+  comment         String
+  
+  created_at DateTime @default(now()) 
+  updated_at DateTime @updatedAt  
+  
+  petsitters Petsitters @relation(fields:[pet_sitter_id], references:[id], onDelete:Cascade)
+  users     Users     @relation(fields:[user_id], references:[id], onDelete:Cascade)
+
+  @@map("Reviews")
+ }
+
+
+
+
+model Refresh_tokens {
+  id        Int     @id @default(autoincrement()) 
+ user_id    Int  @unique   
+ refresh_token    String? 
+ 
+created_at DateTime @default(now()) 
+updated_at DateTime @updatedAt  
+  
+
+  User Users @relation(fields:[user_id], references: [id], onDelete:Cascade)
+
+  @@map("Refresh_tokens")
+  }
+
+
+model Reservation_logs {
+  id              Int  @id @default(autoincrement())   
+  
+  pet_sitter_id   Int      //FK  
+  user_id         Int       //FK   
+
+  old_status     Status 
+  new_status     Status
+  reason         String
+  
+  created_at DateTime @default(now()) 
+  updated_at DateTime @updatedAt  
+  
+  petsitters Petsitters @relation(fields:[pet_sitter_id], references:[id], onDelete:Cascade)
+  users     Users     @relation(fields:[user_id], references:[id], onDelete:Cascade)
+
+  @@map("Reservation_logs")
+ }
