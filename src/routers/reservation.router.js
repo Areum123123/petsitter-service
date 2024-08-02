@@ -82,7 +82,7 @@ reservationRouter.post(
 //예약 목록 조회 API
 reservationRouter.get('/', authMiddleware, async (req, res, next) => {
   const userId = req.user.id;
-  const role = req.user.role; // 사용자 역할을 가져옵니다
+  const role = req.user.role; // 사용자 역할
   const { sort } = req.query;
   const sortOrder = sort
     ? sort.toUpperCase() === 'ASC'
