@@ -34,13 +34,6 @@ export class ReservationController {
         data: createdBooking,
       });
     } catch (err) {
-      if (err.code === 'P2002') {
-        // Prisma의 P2002 오류는 고유 제약 조건 위반을 나타냄(터미널에 code:2002뜸)
-        return res.status(400).json({
-          status: 400,
-          message: '이미 같은 날짜에 해당 펫시터에 대한 예약이 존재합니다.',
-        });
-      }
       next(err);
     }
   };

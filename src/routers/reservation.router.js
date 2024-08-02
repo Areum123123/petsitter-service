@@ -1,5 +1,4 @@
 import express from 'express';
-import { prisma } from '../utils/prisma.util.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import { reservationValidator } from '../validator/reservation.validator.js';
 import { ReservationController } from '../controllers/reservation.controller.js';

@@ -20,4 +20,11 @@ export class AuthRepository {
     });
     return user;
   };
+
+  //authMiddleware
+  findUserById = async (id) => {
+    return await this.prisma.users.findFirst({
+      where: { id: +id },
+    });
+  };
 }

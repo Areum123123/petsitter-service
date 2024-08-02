@@ -25,7 +25,23 @@ export class ReservationService {
       booking_date,
     );
 
-    return booking;
+    return {
+      reservation_id: booking.id,
+      user_id: +userId,
+      pet_details: {
+        dog_name: booking.dog_name,
+        dog_breed: booking.dog_breed,
+        dog_age: booking.dog_age,
+        dog_weight: booking.dog_weight,
+        request_details: booking.request_details,
+      },
+      pet_sitter: {
+        pet_sitter_id: booking.petsitters.id,
+        name: booking.petsitters.name,
+        booking_date: booking.booking_date,
+      },
+      created_at: booking.created_at,
+    };
   };
 
   //예약 목록 조회

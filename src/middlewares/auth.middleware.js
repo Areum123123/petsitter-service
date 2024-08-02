@@ -1,5 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { prisma } from '../utils/prisma.util.js';
+import { AuthRepository } from '../repositories/auth.repository.js';
+
+const authRepository = new AuthRepository(prisma);
 
 export default async function (req, res, next) {
   try {
@@ -13,21 +16,14 @@ export default async function (req, res, next) {
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
     const userId = decodedToken.id;
 
-    const user = await prisma.users.findFirst({
-      where: { id: +userId },
-    });
-
+    const user = await authRepository.findUserById(userId);
     if (!user) {
-      res.clearCookie('authorization');
       throw new Error('인증 정보와 일치하는 사용자가 없습니다.');
     }
-
     req.user = user;
 
     next();
   } catch (err) {
-    res.clearCookie('authorization');
-
     switch (err.name) {
       case 'TokenExpiredError': //토큰이 만료되었을 때 발생하는 에러
         return res.status(401).json({ message: '인증 정보가 만료되었습니다.' });

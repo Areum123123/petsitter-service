@@ -11,7 +11,8 @@ export class ReservationRepository {
     request_details,
     booking_date,
   ) => {
-    const reservation = await prisma.reservations.create({
+    // const reservation =
+    return await prisma.reservations.create({
       data: {
         user_id: +userId,
         pet_sitter_id: +pet_sitter_id,
@@ -32,24 +33,24 @@ export class ReservationRepository {
       },
     });
 
-    const response = {
-      reservation_id: reservation.id,
-      user_id: +userId,
-      pet_details: {
-        dog_name: reservation.dog_name,
-        dog_breed: reservation.dog_breed,
-        dog_age: reservation.dog_age,
-        dog_weight: reservation.dog_weight,
-        request_details: reservation.request_details,
-      },
-      pet_sitter: {
-        pet_sitter_id: reservation.petsitters.id,
-        name: reservation.petsitters.name,
-        booking_date: reservation.booking_date,
-      },
-      created_at: reservation.created_at,
-    };
-    return response;
+    // const response = {
+    //   reservation_id: reservation.id,
+    //   user_id: +userId,
+    //   pet_details: {
+    //     dog_name: reservation.dog_name,
+    //     dog_breed: reservation.dog_breed,
+    //     dog_age: reservation.dog_age,
+    //     dog_weight: reservation.dog_weight,
+    //     request_details: reservation.request_details,
+    //   },
+    //   pet_sitter: {
+    //     pet_sitter_id: reservation.petsitters.id,
+    //     name: reservation.petsitters.name,
+    //     booking_date: reservation.booking_date,
+    //   },
+    //   created_at: reservation.created_at,
+    // };
+    // return response;
   };
 
   //예약 조회 모든예약조회

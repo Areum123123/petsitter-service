@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import petSitters from '../src/utils/petsitterData.js';
+import petSitters from '../data/petsitterData.js';
 
 const prisma = new PrismaClient();
 
