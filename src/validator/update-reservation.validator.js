@@ -19,6 +19,7 @@ const updateReservationSchema = Joi.object({
   booking_date: Joi.date().iso().allow('').optional().messages({
     'date.base': '예약 날짜는 유효한 날짜 형식이어야 합니다.',
     'date.isoDate': '예약 날짜는 ISO 8601 형식이어야 합니다.',
+    'string.base': '예약 날짜는 유효한 날짜 형식이어야 합니다.',
   }),
 });
 
