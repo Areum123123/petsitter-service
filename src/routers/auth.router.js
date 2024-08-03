@@ -21,18 +21,11 @@ authRouter.post('/sign-up', signUpValidator, authController.register);
 authRouter.post('/sign-in', signInValidator, authController.login);
 
 //토큰 재발급 API 진행중
-//refresh토큰 재발급API
 authRouter.post('/token', requireRefreshToken, async (req, res, next) => {
-  //RefreshToken**(JWT)을 **Request Header의 Authorization** 값(**`req.headers.authorization`**)으로 전달 받습니다.
-  //사용자 정보는 **인증 Middleware(`req.user`)**를 통해서 전달 받습니다.
   const userId = req.user.id;
+  const payload = { id: userId };
 
   try {
-    // 2. **비즈니스 로직(데이터 처리)**
-    //     - **AccessToken(Payload**에 **`사용자 ID`**를 포함하고, **유효기한**이 **`12시간`)**을 생성합니다.
-    //     - **RefreshToken** (**Payload**: **사용자 ID** 포함, **유효기한**: **`7일`**)을 생성합니다.
-    const payload = { userId: userId };
-    // AccessToken(Payload**에 **`사용자 ID`**를 포함하고, **유효기한**이 **`12시간`)**을 생성합니다.
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
       expiresIn: '12h',
     });
@@ -42,9 +35,7 @@ authRouter.post('/token', requireRefreshToken, async (req, res, next) => {
     });
 
     const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
-    //     - DB에 저장 된 **RefreshToken을 갱신**합니다.
-    // 3. **반환 정보**
-    //     - **AccessToken, RefreshToken**을 반환합니다.
+
     await prisma.refresh_tokens.upsert({
       where: { user_id: +userId },
       update: {

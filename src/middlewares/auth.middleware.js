@@ -1,8 +1,5 @@
 import jwt from 'jsonwebtoken';
 import { prisma } from '../utils/prisma.util.js';
-import { AuthRepository } from '../repositories/auth.repository.js';
-
-const authRepository = new AuthRepository(prisma);
 
 export default async function (req, res, next) {
   try {
@@ -16,10 +13,14 @@ export default async function (req, res, next) {
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
     const userId = decodedToken.id;
 
-    const user = await authRepository.findUserById(userId);
+    const user = await prisma.users.findFirst({
+      where: { id: +userId },
+    });
+
     if (!user) {
       throw new Error('인증 정보와 일치하는 사용자가 없습니다.');
     }
+
     req.user = user;
 
     next();

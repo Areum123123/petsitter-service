@@ -55,7 +55,7 @@ model Users {
   
   reservations     Reservations[]
   reviews          Reviews[]
-  reservation_logs Reservation_logs[]
+  
 
   @@map("Petsitters")
  }
@@ -80,7 +80,7 @@ model Users {
   created_at DateTime @default(now()) 
   updated_at DateTime @updatedAt  
 
-  
+  reservation_logs Reservation_logs[]
   petsitters Petsitters @relation(fields:[pet_sitter_id], references:[id], onDelete:Cascade)
   users     Users     @relation(fields:[user_id], references:[id], onDelete:Cascade)
 
@@ -139,7 +139,7 @@ updated_at DateTime @updatedAt
 model Reservation_logs {
   id              Int  @id @default(autoincrement())   
   
-  pet_sitter_id   Int      //FK  
+  reservation_id   Int      //FK  
   user_id         Int       //FK   
 
   old_status     Status 
@@ -149,7 +149,7 @@ model Reservation_logs {
   created_at DateTime @default(now()) 
   updated_at DateTime @updatedAt  
   
-  petsitters Petsitters @relation(fields:[pet_sitter_id], references:[id], onDelete:Cascade)
+  reservations Reservations @relation(fields:[reservation_id], references:[id], onDelete:Cascade)
   users     Users     @relation(fields:[user_id], references:[id], onDelete:Cascade)
 
   @@map("Reservation_logs")
