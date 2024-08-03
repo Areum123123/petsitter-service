@@ -27,11 +27,19 @@ export class AuthController {
   login = async (req, res, next) => {
     try {
       const { email, password } = req.body;
-      const { accessToken } = await this.authService.login(email, password);
+      const { accessToken, refreshToken } = await this.authService.login(
+        email,
+        password,
+      );
 
       return res
         .status(200)
-        .json({ status: 200, message: '로그인 성공했습니다.', accessToken });
+        .json({
+          status: 200,
+          message: '로그인 성공했습니다.',
+          accessToken,
+          refreshToken,
+        });
     } catch (err) {
       next(err);
     }

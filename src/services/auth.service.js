@@ -1,7 +1,12 @@
 import { AuthRepository } from '../repositories/auth.repository.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { ACCESS_TOKEN_SECRET_KEY } from '../constant/env.constant.js';
+import {
+  ACCESS_TOKEN_SECRET_KEY,
+  REFRESH_TOKEN_SECRET_KEY,
+} from '../constant/env.constant.js';
+import { prisma } from '../utils/prisma.util.js';
+
 export class AuthService {
   authRepository = new AuthRepository();
 
@@ -51,7 +56,33 @@ export class AuthService {
         { expiresIn: '12h' },
       );
 
-      return { accessToken };
+      //refresh토큰  발급
+      const refreshToken = jwt.sign(
+        {
+          id: user.id,
+        },
+        REFRESH_TOKEN_SECRET_KEY,
+        { expiresIn: '7d' },
+      );
+
+      //refresh 토큰 저장(hash 값으로 저장)
+      const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
+
+      //refresh 토큰 생성 또는 갱신 upsert() 있으면 update 없으면 create
+      await prisma.refresh_tokens.upsert({
+        where: {
+          user_id: user.id,
+        },
+        update: {
+          refresh_token: hashedRefreshToken,
+        },
+        create: {
+          user_id: user.id,
+          refresh_token: hashedRefreshToken,
+        },
+      });
+
+      return { accessToken, refreshToken };
     } catch (err) {
       throw err;
     }
