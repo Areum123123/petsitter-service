@@ -32,14 +32,28 @@ export class AuthController {
         password,
       );
 
-      return res
-        .status(200)
-        .json({
-          status: 200,
-          message: '로그인 성공했습니다.',
-          accessToken,
-          refreshToken,
-        });
+      return res.status(200).json({
+        status: 200,
+        message: '로그인 성공했습니다.',
+        accessToken,
+        refreshToken,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  //토큰재발급
+  refreshToken = async (req, res, next) => {
+    const userId = req.user.id;
+    try {
+      const tokens = await this.authService.refreshToken(+userId);
+
+      return res.status(200).json({
+        status: 200,
+        message: '토큰 재발급에 성공했습니다.',
+        ...tokens,
+      });
     } catch (err) {
       next(err);
     }

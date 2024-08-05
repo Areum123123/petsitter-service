@@ -96,4 +96,94 @@ export class ReservationController {
       next(err);
     }
   };
+
+  //예약변경
+  updateReservation = async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const { reservationId } = req.params;
+      const {
+        dog_name,
+        dog_breed,
+        dog_age,
+        dog_weight,
+        request_details,
+        booking_date,
+      } = req.body;
+
+      // 서비스 호출
+      const updatedReservation =
+        await this.reservationService.updateReservation(
+          +userId, // 변환 확인
+          +reservationId, // 변환 확인
+          dog_name,
+          dog_breed,
+          dog_age,
+          dog_weight,
+          request_details,
+          booking_date,
+        );
+
+      return res.status(200).json({
+        status: 200,
+        message: '예약 수정에 성공했습니다.',
+        data: updatedReservation,
+      });
+    } catch (err) {
+      next(err); // 오류를 다음 미들웨어로 전달
+    }
+  };
+
+  //예약취소
+  cancelReservation = async (req, res, next) => {
+    try {
+      const userId = req.user.id;
+      const { reservationId } = req.params;
+      const { reason } = req.body;
+
+      //정리하기
+      if (!reason || typeof reason !== 'string' || reason.trim() === '') {
+        return res.status(400).json({
+          status: 400,
+          message: '취소 사유는 필수 입력 항목입니다.',
+        });
+      }
+
+      const result = await this.reservationService.cancelReservation(
+        +userId,
+        +reservationId,
+        reason,
+      );
+
+      return res.status(200).json({
+        status: 200,
+        message: '예약이 성공적으로 취소되었습니다.',
+        reservationId: `${reservationId}`,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  //예약 상태(status) 변경
+  updateStatus = async (req, res, next) => {
+    const { reservationId } = req.params;
+    const { new_status, reason } = req.body;
+    const userId = req.user.id;
+    try {
+      const updatedReservation = await this.reservationService.updateStatus(
+        +userId,
+        +reservationId,
+        new_status,
+        reason,
+      );
+      return res.status(200).json({
+        status: 200,
+        message: '예약 상태가 성공적으로 변경되었습니다.',
+        data: updatedReservation,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
 }

@@ -76,6 +76,7 @@ model Users {
   request_details     String?
   booking_date        DateTime
   status              Status  @default(PENDING)
+  deleted_at          DateTime?  
 
   created_at DateTime @default(now()) 
   updated_at DateTime @updatedAt  
@@ -149,7 +150,7 @@ model Reservation_logs {
   created_at DateTime @default(now()) 
   updated_at DateTime @updatedAt  
   
-  reservations Reservations @relation(fields:[reservation_id], references:[id], onDelete:Cascade)
+  reservations Reservations @relation(fields:[reservation_id], references:[id]) //onDelete:Cascade
   users     Users     @relation(fields:[user_id], references:[id], onDelete:Cascade)
 
   @@map("Reservation_logs")

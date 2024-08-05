@@ -80,7 +80,7 @@ export const requireRefreshToken = async (req, res, next) => {
 
     // payload에 담긴 사용자 ID와 일치하는 사용자가 없는 경우
     const user = await prisma.users.findUnique({
-      where: { id: id }, // Prisma 스키마에서 id를 사용
+      where: { id }, // Prisma 스키마에서 id를 사용
     });
 
     if (!user) {

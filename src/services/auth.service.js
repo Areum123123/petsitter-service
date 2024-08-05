@@ -87,4 +87,26 @@ export class AuthService {
       throw err;
     }
   };
+
+  //토큰재발급
+  refreshToken = async (userId) => {
+    const payload = { id: userId };
+
+    const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
+      expiresIn: '12h',
+    });
+
+    const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET_KEY, {
+      expiresIn: '7d',
+    });
+
+    const hashedRefreshToken = bcrypt.hashSync(refreshToken, 10);
+
+    await this.authRepository.upsertRefreshToken(+userId, hashedRefreshToken);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  };
 }

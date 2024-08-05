@@ -23,6 +23,26 @@ export const errorHandler = (err, req, res, next) => {
       status: 400,
       message: '이미 같은 날짜에 해당 펫시터에 대한 예약이 존재합니다.',
     });
+  } else if (err.message === '예약 정보가 존재하지 않습니다.') {
+    return res.status(404).json({
+      status: 404,
+      message: err.message,
+    });
+  } else if (err.message === '해당 날짜는 이미 예약되어 있습니다.') {
+    return res.status(400).json({
+      status: 400,
+      message: err.message,
+    });
+  } else if (err.message === '예약 정보가 존재하지 않습니다.') {
+    return res.status(404).json({
+      status: 404,
+      message: err.message,
+    });
+  } else if (err.message === '예약 상태를 변경할 권한이 없습니다.') {
+    return res.status(403).json({
+      status: 403,
+      message: err.message,
+    });
   }
 
   // 그 밖의 예상치 못한 에러 처리

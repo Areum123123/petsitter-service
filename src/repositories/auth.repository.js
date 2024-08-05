@@ -20,4 +20,18 @@ export class AuthRepository {
     });
     return user;
   };
+
+  //토큰 재발급
+  upsertRefreshToken = async (userId, hashedRefreshToken) => {
+    await prisma.refresh_tokens.upsert({
+      where: { user_id: +userId },
+      update: {
+        refresh_token: hashedRefreshToken,
+      },
+      create: {
+        user_id: +userId,
+        refresh_token: hashedRefreshToken,
+      },
+    });
+  };
 }
