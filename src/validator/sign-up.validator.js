@@ -19,11 +19,11 @@ const signUpSchema = Joi.object({
     'string.empty': '비밀번호를 확인을 입력해주세요.',
   }),
 
-  name: Joi.string().min(3).max(30).required().messages({
+  name: Joi.string().min(2).max(30).required().messages({
     'string.base': '이름은 문자열이어야 합니다.',
     'string.empty': '이름을 입력해주세요.',
     'any.required': '이름을 입력해주세요.',
-    'string.min': '이름은 최소 3글자 이상이어야 합니다.',
+    'string.min': '이름은 최소 2글자 이상이어야 합니다.',
     'string.max': '이름은 최대 10글자 이하여야 합니다.',
   }),
 
