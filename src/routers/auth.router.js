@@ -24,5 +24,18 @@ authRouter.post('/sign-in', signInValidator, authController.login);
 authRouter.post('/token', requireRefreshToken, authController.refreshToken);
 
 //로그아웃 API
+authRouter.post('/sign-out', requireRefreshToken, async (req, res, next) => {
+  const userId = req.user.id;
+  try {
+    await prisma.refresh_tokens.delete({
+      where: { user_id: +userId },
+    });
 
+    return res
+      .status(200)
+      .json({ status: 200, message: '로그아웃 되었습니다.', ID: `${userId}` });
+  } catch (err) {
+    next(err);
+  }
+});
 export default authRouter;

@@ -35,10 +35,18 @@ const signUpSchema = Joi.object({
       'any.required': '전화번호를 입력해주세요.',
       'string.empty': '전화번호를 입력해주세요.',
     }),
-  address: Joi.string().required().messages({
-    'string.empty': '주소를 입력해주세요.',
-    'any.required': '주소를 입력해주세요.',
-  }),
+  address: Joi.string()
+    .min(5) // 주소는 최소 5자 이상
+    .max(100) // 주소는 최대 100자 이하
+    .pattern(/^[a-zA-Z0-9가-힣\s,.-]+$/) // 알파벳,한글, 숫자, 공백, 쉼표, 마침표 및 대시만 허용
+    .required()
+    .messages({
+      'string.empty': '주소를 입력해주세요.',
+      'string.min': '주소는 최소 5자 이상이어야 합니다.',
+      'string.max': '주소는 최대 100자 이하이어야 합니다.',
+      'string.pattern.base': '주소에 유효하지 않은 문자가 포함되어 있습니다.',
+      'any.required': '주소를 입력해주세요.',
+    }),
 });
 
 export const signUpValidator = async (req, res, next) => {
