@@ -3,6 +3,7 @@ import { prisma } from '../utils/prisma.util.js';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import { reservationValidator } from '../validator/reservation.validator.js';
 import { updateStatusValidator } from '../validator/update-status.validator.js';
+import { updateReservationValidator } from '../validator/update-reservation.validator.js';
 
 const reservationRouter = express.Router();
 

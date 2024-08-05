@@ -5,6 +5,7 @@ import { ACCESS_TOKEN_SECRET_KEY } from '../constant/env.constant.js';
 import { prisma } from '../utils/prisma.util.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { requireRefreshToken } from '../middlewares/refresh-token.middleware.js';
 
 const authRouter = express.Router();
 
