@@ -1,14 +1,18 @@
-import { PetsitterRepository } from '../repositories/petsitter.repository.js';
 import { PetsitterService } from '../services/petsitter.service.js';
 
 export class PetsitterController {
   petsitterService = new PetsitterService();
-  petsitterRepository = new PetsitterRepository();
 
-  //펫시터 목록 조회 controller -> repository  비즈니스로직추가시 수정
+  //펫시터 목록 조회[이름,지역,경력별 검색]
   getPetsitters = async (req, res, next) => {
+    const { name, region, experience } = req.query;
+
     try {
-      const petsitters = await this.petsitterRepository.findAllPetsitters();
+      const petsitters = await this.petsitterService.findAllPetsitters(
+        name,
+        region,
+        experience,
+      );
 
       return res.status(200).json({
         status: 200,
