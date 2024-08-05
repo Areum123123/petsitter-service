@@ -95,5 +95,61 @@ petsitterRouter.post(
     }
   },
 );
+//펫시터 리뷰 조회 API
+petsitterRouter.get('/:petSitterId/reviews', async (req, res, next) => {
+  const { petSitterId } = req.params;
+  try {
+    //펫시터 존재여부
+    const petSitter = await prisma.petsitters.findUnique({
+      where: {
+        id: +petSitterId,
+      },
+    });
+
+    if (!petSitter) {
+      return res.status(404).json({
+        status: 404,
+        message: '펫시터를 찾을 수 없습니다.',
+        data: [],
+      });
+    }
+    //펫시터 리뷰찾기
+    const reviews = await prisma.reviews.findMany({
+      where: { pet_sitter_id: +petSitterId },
+      orderBy: { created_at: 'desc' },
+      select: {
+        id: true,
+        pet_sitter_id: true,
+        users: {
+          select: {
+            name: true,
+          },
+        },
+        rating: true,
+        comment: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
+
+    const formattedReviews = reviews.map((review) => ({
+      review_id: review.id,
+      pet_sitter_id: review.pet_sitter_id,
+      reviews: {
+        user_name: review.users.name,
+        rating: review.rating,
+        comment: review.comment,
+        created_at: review.created_at,
+        updated_at: review.updated_at,
+      },
+    }));
+
+    return res
+      .status(200)
+      .json({ status: 200, message: '리뷰 조회', data: formattedReviews });
+  } catch (err) {
+    next(err);
+  }
+});
 
 export default petsitterRouter;
