@@ -10,7 +10,7 @@ export const adminMiddleware = async (req, res, next) => {
     if (user.role !== 'ADMIN') {
       return res.status(403).json({
         status: 403,
-        message: '예약 상태를 변경할 권한이 없습니다.',
+        message: '해당 작업에 대한 권한이 없습니다.',
       });
     }
     next();

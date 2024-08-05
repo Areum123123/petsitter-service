@@ -4,7 +4,7 @@ import petsitterRouter from './petsitter.router.js';
 import reservationRouter from './reservation.router.js';
 import userRouter from './user.router.js';
 import reviewRouter from './review.router.js';
-// import  authMiddleware  from "../middlewares/auth.middleware.js"
+import logRouter from './reservation-logs.router.js';
 
 const apiRouter = express.Router();
 
@@ -13,5 +13,5 @@ apiRouter.use('/users', userRouter);
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/reservations', reservationRouter);
 apiRouter.use('/reviews', reviewRouter);
-
+apiRouter.use('/', logRouter);
 export default apiRouter;

@@ -104,4 +104,39 @@ reviewRouter.patch(
     }
   },
 );
+
+//리뷰 삭제 API
+reviewRouter.delete('/:reviewId', authMiddleware, async (req, res, next) => {
+  const { reviewId } = req.params;
+  const userId = req.user.id;
+  try {
+    //리뷰찾기
+    const review = await prisma.reviews.findFirst({
+      where: {
+        id: +reviewId,
+        user_id: +userId,
+      },
+    });
+
+    if (!review) {
+      return res.status(404).json({
+        status: 404,
+        message: '리뷰가 존재하지 않습니다.',
+      });
+    }
+    //삭제
+    await prisma.reviews.delete({
+      where: {
+        id: +reviewId,
+        // user_id: +userId,
+      },
+    });
+
+    return res
+      .status(200)
+      .json({ status: 200, message: '리뷰가 성공적으로 삭제되었습니다.' });
+  } catch (err) {
+    next(err);
+  }
+});
 export default reviewRouter;

@@ -90,10 +90,10 @@ export class ReservationService {
   //예약상세조회
   getReservationById = async (reservationId, userId, role) => {
     try {
-      const whereObject = { id: Number(reservationId) };
+      const whereObject = { id: +reservationId };
 
       if (role === 'USER') {
-        whereObject.user_id = Number(userId);
+        whereObject.user_id = +userId;
       }
 
       const reservation =
