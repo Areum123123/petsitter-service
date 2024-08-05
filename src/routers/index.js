@@ -7,7 +7,7 @@ import reviewRouter from './review.router.js';
 
 const apiRouter = express.Router();
 
-apiRouter.use('/', petsitterRouter);
+apiRouter.use('/pet-sitters', petsitterRouter);
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/reservations', reservationRouter);
 apiRouter.use('/reviews', reviewRouter);
