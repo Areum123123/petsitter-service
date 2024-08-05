@@ -7,8 +7,25 @@ const petsitterRouter = express.Router();
 
 //펫시터 목록 조회 API
 petsitterRouter.get('/pet-sitters', async (req, res, next) => {
+  const { name, region, experience } = req.query;
+
   try {
+    const whereObject = {};
+
+    if (name) {
+      whereObject.name = { contains: name }; //contains 를 사용하면 부분일치 검색이 가능하다.
+    }
+
+    if (region) {
+      whereObject.region = { contains: region };
+    }
+
+    if (experience) {
+      whereObject.experience = { contains: experience };
+    }
+
     const petSitter = await prisma.petsitters.findMany({
+      where: whereObject,
       orderBy: { created_at: 'desc' },
     });
 

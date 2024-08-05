@@ -6,7 +6,7 @@ import { prisma } from '../utils/prisma.util.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { requireRefreshToken } from '../middlewares/refresh-token.middleware.js';
-
+import { REFRESH_TOKEN_SECRET_KEY } from '../constant/env.constant.js';
 const authRouter = express.Router();
 
 //회원가입 API
