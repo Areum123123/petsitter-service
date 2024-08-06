@@ -206,21 +206,6 @@ petsitterRouter.post(
         data: formattedReview,
       });
     } catch (err) {
-      if (err.message === '펫시터를 찾을 수 없습니다') {
-        return res.status(404).json({
-          status: 404,
-          message: err.message,
-        });
-      }
-
-      if (err.isJoi) {
-        // Joi 유효성 검사 오류
-        const errorMessage = err.details
-          .map((detail) => detail.message)
-          .join(', ');
-        return res.status(400).json({ message: errorMessage });
-      }
-
       next(err);
     }
   },
