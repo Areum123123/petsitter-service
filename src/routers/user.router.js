@@ -91,10 +91,14 @@ userRouter.post(
       const updatedUser = await prisma.users.update({
         where: { id: +userId },
         data: { image_url: imageUrl },
+        select: {
+          image_url: true,
+        },
       });
       res.status(200).json({
         status: 200,
         message: '이미지업로드 성공!',
+        data: updatedUser,
       });
     } catch (error) {
       next(err);

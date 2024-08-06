@@ -56,6 +56,11 @@ export const errorHandler = (err, req, res, next) => {
       status: 404,
       message: `해당 사용자의 refresh_token을 찾을 수 없습니다.`,
     });
+  } else if (err.message === '펫시터를 찾을 수 없습니다') {
+    return res.status(404).json({
+      status: 404,
+      message: err.message,
+    });
   }
 
   // 그 밖의 예상치 못한 에러 처리
