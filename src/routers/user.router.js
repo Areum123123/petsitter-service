@@ -2,6 +2,7 @@ import express from 'express';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import { prisma } from '../utils/prisma.util.js';
 import { updateUserValidator } from '../validator/update-user.validator.js';
+import upload from '../config/s3.js';
 
 const userRouter = express.Router();
 //내정보 조회 API
@@ -72,4 +73,33 @@ userRouter.patch(
     });
   },
 );
+
+// 이미지 업로드 엔드포인트
+userRouter.post(
+  '/me/upload-images',
+  authMiddleware,
+  upload.single('image'),
+  async (req, res) => {
+    const userId = req.body.id;
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    try {
+      const imageUrl = req.file.location;
+      const updatedUser = await prisma.users.update({
+        where: { id: +userId },
+        data: { image_url: imageUrl },
+      });
+      res.status(200).json({
+        status: 200,
+        message: '이미지업로드 성공!',
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Something went wrong' });
+    }
+  },
+);
+
 export default userRouter;
