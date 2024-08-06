@@ -80,10 +80,10 @@ userRouter.post(
   authMiddleware,
   upload.single('image'),
   async (req, res) => {
-    const userId = req.body.id;
+    const userId = req.user.id;
 
     if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+      return res.status(400).json({ error: '파일을 업로드 해주세요.' });
     }
 
     try {
@@ -97,7 +97,7 @@ userRouter.post(
         message: '이미지업로드 성공!',
       });
     } catch (error) {
-      res.status(500).json({ error: 'Something went wrong' });
+      next(err);
     }
   },
 );
