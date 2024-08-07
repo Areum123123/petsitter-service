@@ -67,7 +67,7 @@ export class ReservationRepository {
     });
   };
 
-  // 예약 변경 API
+  // 예약 찾기
   findReservationByIdAndUser = async (reservationId, userId) => {
     return prisma.reservations.findFirst({
       where: {
@@ -108,7 +108,7 @@ export class ReservationRepository {
     });
   };
 
-  //예약취소
+  //예약취소 [service에 정리하기]
   cancelReservation = async (userId, reservationId, reason) => {
     // 트랜잭션으로 예약 삭제 및 로그 기록
     return await prisma.$transaction(async (tx) => {
@@ -129,7 +129,7 @@ export class ReservationRepository {
         throw new Error('예약 정보가 존재하지 않습니다.');
       }
 
-      // 예약 로그 기록[수정필요]
+      // 예약 로그 기록
       console.log({ reason });
       const result = await tx.reservation_logs.create({
         data: {
@@ -197,12 +197,6 @@ export class ReservationRepository {
         reservation_id: +reservationId,
         user_id: +userId,
         petsitter_id: updatedReservation.pet_sitter_id,
-        // pet_details: {
-        //   dog_name: updatedReservation.dog_name,
-        //   dog_breed: updatedReservation.dog_breed,
-        //   dog_age: updatedReservation.dog_age,
-        //   dog_weight: updatedReservation.dog_weight,
-        // }, //대기상태변경 강아지 정보
         updated_status: {
           old_status: reservation.status,
           new_status: new_status,

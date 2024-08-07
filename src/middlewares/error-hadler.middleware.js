@@ -20,7 +20,7 @@ export const errorHandler = (err, req, res, next) => {
       status: 401,
       message: err.message,
     });
-  } else if (err.message === '사용자가 존재하지 않습니다.') {
+  } else if (err.message === '사용자를 찾을 수 없습니다.') {
     return res.status(404).json({
       status: 404,
       message: err.message,
@@ -57,6 +57,11 @@ export const errorHandler = (err, req, res, next) => {
       message: `해당 사용자의 refresh_token을 찾을 수 없습니다.`,
     });
   } else if (err.message === '펫시터를 찾을 수 없습니다') {
+    return res.status(404).json({
+      status: 404,
+      message: err.message,
+    });
+  } else if (err.message === '리뷰가 존재하지 않습니다.') {
     return res.status(404).json({
       status: 404,
       message: err.message,

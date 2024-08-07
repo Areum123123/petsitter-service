@@ -34,4 +34,11 @@ export class AuthRepository {
       },
     });
   };
+
+  //로그아웃
+  logout = async (userId) => {
+    await prisma.refresh_tokens.delete({
+      where: { user_id: +userId },
+    });
+  };
 }

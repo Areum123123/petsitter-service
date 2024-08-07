@@ -23,4 +23,42 @@ export class PetsitterController {
       next(err);
     }
   };
+
+  //펫시터 리뷰생성
+  createReview = async (req, res, next) => {
+    const userId = req.user.id;
+    const { petSitterId } = req.params;
+    const { rating, comment } = req.body;
+    try {
+      const transactionResult = await this.petsitterService.createReview(
+        userId,
+        petSitterId,
+        rating,
+        comment,
+      );
+
+      return res.status(201).json({
+        status: 201,
+        message: '리뷰가 성공적으로 작성되었습니다.',
+        data: transactionResult,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  getPetsitterReviews = async (req, res, next) => {
+    const { petSitterId } = req.params;
+    try {
+      //펫시터 리뷰 찾기
+      const reviews =
+        await this.petsitterService.getReviewByPetsitterId(petSitterId);
+
+      return res
+        .status(200)
+        .json({ status: 200, message: '리뷰 조회', data: reviews });
+    } catch (err) {
+      next(err);
+    }
+  };
 }

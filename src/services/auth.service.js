@@ -40,7 +40,7 @@ export class AuthService {
       const user = await this.authRepository.findUserByEmail(email);
 
       if (!user) {
-        throw new Error('사용자가 존재하지 않습니다.');
+        throw new Error('사용자를 찾을 수 없습니다.');
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);

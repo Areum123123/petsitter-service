@@ -2,7 +2,6 @@ import express from 'express';
 import authMiddleware from '../middlewares/auth.middleware.js';
 import { reservationValidator } from '../validator/reservation.validator.js';
 import { ReservationController } from '../controllers/reservation.controller.js';
-import { prisma } from '../utils/prisma.util.js';
 import { updateReservationValidator } from '../validator/update-reservation.validator.js';
 import { updateStatusValidator } from '../validator/update-status.validator.js';
 import { adminMiddleware } from '../middlewares/Admin.middleware.js';

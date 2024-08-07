@@ -1,11 +1,4 @@
 import express from 'express';
-import bcrypt from 'bcrypt';
-import { prisma } from '../utils/prisma.util.js';
-import jwt from 'jsonwebtoken';
-import {
-  REFRESH_TOKEN_SECRET_KEY,
-  ACCESS_TOKEN_SECRET_KEY,
-} from '../constant/env.constant.js';
 import { AuthController } from '../controllers/auth.controller.js';
 import { signUpValidator } from '../validator/sign-up.validator.js';
 import { signInValidator } from '../validator/sign-in.validator.js';
@@ -24,18 +17,6 @@ authRouter.post('/sign-in', signInValidator, authController.login);
 authRouter.post('/token', requireRefreshToken, authController.refreshToken);
 
 //로그아웃 API
-authRouter.post('/sign-out', requireRefreshToken, async (req, res, next) => {
-  const userId = req.user.id;
-  try {
-    await prisma.refresh_tokens.delete({
-      where: { user_id: +userId },
-    });
+authRouter.post('/sign-out', requireRefreshToken, authController.logout);
 
-    return res
-      .status(200)
-      .json({ status: 200, message: '로그아웃 되었습니다.', ID: `${userId}` });
-  } catch (err) {
-    next(err);
-  }
-});
 export default authRouter;

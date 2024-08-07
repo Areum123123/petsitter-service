@@ -1,7 +1,9 @@
+import { AuthRepository } from '../repositories/auth.repository.js';
 import { AuthService } from '../services/auth.service.js';
 
 export class AuthController {
   authService = new AuthService();
+  authRepository = new AuthRepository();
   //회원가입 API
   register = async (req, res, next) => {
     try {
@@ -54,6 +56,24 @@ export class AuthController {
         message: '토큰 재발급에 성공했습니다.',
         ...tokens,
       });
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  //로그아웃
+  logout = async (req, res, next) => {
+    const userId = req.user.id;
+    try {
+      const logout = await this.authRepository.logout(userId);
+
+      return res
+        .status(200)
+        .json({
+          status: 200,
+          message: '로그아웃 되었습니다.',
+          ID: `${userId}`,
+        });
     } catch (err) {
       next(err);
     }
