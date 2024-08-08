@@ -27,11 +27,15 @@ export class ReviewService {
     }
 
     //찾은 리뷰 수정
+    const updateData = {
+      rating: rating,
+      comment: comment,
+    };
+
     const updateReview = await this.reviewRepository.updateReview(
       reviewId,
       userId,
-      rating,
-      comment,
+      updateData,
     );
 
     //수정한 펫시터 리뷰 보기

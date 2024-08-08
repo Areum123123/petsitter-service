@@ -2,6 +2,8 @@ import Joi from 'joi';
 
 const updateUserSchema = Joi.object({
   phone_number: Joi.string()
+    .allow('')
+    .optional()
     .pattern(/^[0-9]{9,11}$/) //전화번호 9자리에서 11자리까지 허용
     .required()
     .messages({
@@ -10,6 +12,8 @@ const updateUserSchema = Joi.object({
       'string.empty': '전화번호를 입력해주세요.',
     }),
   address: Joi.string()
+    .allow('')
+    .optional()
     .min(5) // 주소는 최소 5자 이상
     .max(100) // 주소는 최대 100자 이하
     .pattern(/^[a-zA-Z0-9가-힣\s,.-]+$/) // 알파벳,한글, 숫자, 공백, 쉼표, 마침표 및 대시만 허용

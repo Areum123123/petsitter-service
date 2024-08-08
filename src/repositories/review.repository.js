@@ -27,13 +27,10 @@ export class ReviewRepository {
     });
   };
 
-  updateReview = async (reviewId, userId, rating, comment) => {
+  updateReview = async (reviewId, userId, updateData) => {
     return await prisma.reviews.update({
       where: { id: +reviewId, user_id: +userId },
-      data: {
-        rating,
-        comment,
-      },
+      data: updateData,
     });
   };
 

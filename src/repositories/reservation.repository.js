@@ -158,13 +158,6 @@ export class ReservationRepository {
   };
 
   //예약상태변경
-  //아이디로 유저 찾기
-  findUserById = async (userId) => {
-    return await prisma.users.findFirst({
-      where: { id: +userId },
-    });
-  };
-
   updateStatus = async (userId, reservationId, new_status, reason) => {
     return await prisma.$transaction(async (prisma) => {
       // 예약 정보 조회

@@ -26,10 +26,17 @@ export class UserController {
     const { phone_number, address } = req.body;
 
     try {
+      const users = await this.userRepository.findUserById(userId);
+
+      // user.service에 넣기 짧아서 컨트롤에 합침
+      const updateData = {
+        phone_number: phone_number || users.phone_number,
+        address: address || users.address,
+      };
+
       const updatedUser = await this.userRepository.updateUser(
         userId,
-        phone_number,
-        address,
+        updateData,
       );
 
       return res.status(200).json({

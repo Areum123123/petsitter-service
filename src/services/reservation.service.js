@@ -235,9 +235,6 @@ export class ReservationService {
   //예약상태변경
 
   updateStatus = async (userId, reservationId, new_status, reason) => {
-    // 사용자 정보 조회
-    const user = await this.reservationRepository.findUserById(+userId);
-
     return await this.reservationRepository.updateStatus(
       +userId,
       +reservationId,

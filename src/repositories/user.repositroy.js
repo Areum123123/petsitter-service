@@ -11,20 +11,17 @@ export class UserRepository {
         phone_number: true,
         address: true,
         role: true,
+        image_url: true,
         created_at: true,
         updated_at: true,
       },
     });
   };
 
-  updateUser = async (userId, phone_number, address) => {
+  updateUser = async (userId, updateData) => {
     return await prisma.users.update({
       where: { id: +userId },
-      data: {
-        phone_number,
-        address,
-        updated_at: new Date(),
-      },
+      data: updateData,
       select: {
         id: true,
         name: true,
